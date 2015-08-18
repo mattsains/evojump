@@ -19,6 +19,16 @@ namespace WindowsGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+
+        protected IGameState _currentGameState = null; //TODO: set first game screen here
+        protected bool _hasLoadedContent = false;
+
+        public IGameState CurrentGameState
+        {
+            get { return _currentGameState; }
+            set { _currentGameState = value; _hasLoadedContent = false; }
+        }
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -46,8 +56,6 @@ namespace WindowsGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -70,7 +78,15 @@ namespace WindowsGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+
+            // let a new game screen load content if it has not yet done so
+            if (!_hasLoadedContent)
+            {
+                CurrentGameState.LoadContent(GraphicsDevice, Content);
+                _hasLoadedContent = true;
+            }
+
+            CurrentGameState.Update(gameTime, GraphicsDevice);
 
             base.Update(gameTime);
         }
@@ -83,8 +99,7 @@ namespace WindowsGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-
+            CurrentGameState.Draw(gameTime, GraphicsDevice);
             base.Draw(gameTime);
         }
     }
