@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsGame", "WindowsGame\
 EndProject
 Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "WindowsGameContent", "WindowsGame\WindowsGameContent\WindowsGameContent.contentproj", "{E825403B-9E5A-4092-A387-266AAA92E68D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasierSockets", "EasierSockets\EasierSockets.csproj", "{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,16 @@ Global
 		{E825403B-9E5A-4092-A387-266AAA92E68D}.Release|Any CPU.ActiveCfg = Release|x86
 		{E825403B-9E5A-4092-A387-266AAA92E68D}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{E825403B-9E5A-4092-A387-266AAA92E68D}.Release|x86.ActiveCfg = Release|x86
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FA3EA9AB-9FF5-4FDA-B22B-CE99B85C27EB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -84,6 +84,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EasierSockets\EasierSockets.csproj">
+      <Project>{fa3ea9ab-9ff5-4fda-b22b-ce99b85c27eb}</Project>
+      <Name>EasierSockets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LevelServer\LevelServer.csproj">
+      <Project>{a4cf2ff9-4899-484d-8b75-a5ccabe8f1c0}</Project>
+      <Name>LevelServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WindowsGameContent\WindowsGameContent.contentproj">
       <Name>WindowsGameContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
