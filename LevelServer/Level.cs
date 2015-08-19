@@ -60,10 +60,49 @@ namespace LevelServer
             s.Seek(0, SeekOrigin.Begin);
             return (Level)formatter.Deserialize(s);
         }
+
+        /// <summary>
+        /// Given another level, produce a new level that is the result of genetic crossover of both instances
+        /// </summary>
+        /// <param name="other">The other instance.</param>
+        /// <param name="crossoverMagnitude">Between 0 and 1, determines how much crossover happens</param>
+        /// <returns>A new level</returns>
+        public Level Crossover(Level other, double crossoverMagnitude)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Mutates the level to produce a new level. Does not alter the original.
+        /// </summary>
+        /// <param name="mutationRate">Between 0 and 1, determines how much mutation happens</param>
+        /// <returns>A new level</returns>
+        public Level Mutate(double mutationRate)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface ILevelComponent
     {
+        /// <summary>
+        /// Gets the bounding box for the level component
+        /// </summary>
         Rectangle Position { get; }
+
+        /// <summary>
+        /// Given another level component of the same type, produce a new level component that is the result of genetic crossover of both instances
+        /// </summary>
+        /// <param name="other">The other instance. Is always the same type as the callee</param>
+        /// <param name="crossoverMagnitude">Between 0 and 1, determines how much crossover happens</param>
+        /// <returns>A new component of the same type</returns>
+        T Crossover<T>(T other, double crossoverMagnitude) where T : ILevelComponent;
+
+        /// <summary>
+        /// Mutates the level component to produce a new level component. Does not alter the original.
+        /// </summary>
+        /// <param name="mutationRate">Between 0 and 1, determines how much mutation happens</param>
+        /// <returns>A new level component</returns>
+        ILevelComponent Mutate(double mutationRate);
     }
 }

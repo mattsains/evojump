@@ -10,6 +10,9 @@ namespace LevelServer
     {
         const int MIN_LEVELS = 20;
         const int MAX_LEVELS = 10000;
+        const double MUTATION_RATE = 0.2;
+        const double CROSSOVER_RATE = 0.2;
+
         static Random R = new Random();
 
         public static void Initialize()
@@ -27,10 +30,10 @@ namespace LevelServer
                 }
                 else if (count > MAX_LEVELS)
                 {
-                        int toRemove = MAX_LEVELS - count;
-                        var levelsToRemove = levelsContext.Levels.OrderBy(level => levelsContext.GetAverageRatingForLevel(level)).Take(toRemove);
+                    int toRemove = MAX_LEVELS - count;
+                    var levelsToRemove = levelsContext.Levels.OrderBy(level => levelsContext.GetAverageRatingForLevel(level)).Take(toRemove);
 
-                        levelsContext.Levels.RemoveRange(levelsToRemove);
+                    levelsContext.Levels.RemoveRange(levelsToRemove);
                 }
                 levelsContext.SaveChanges();
             }
@@ -70,12 +73,19 @@ namespace LevelServer
 
                     if (ratingsCount - lastRatingsCount > 10)
                     {
-                        for (int i = 0; i < 3; i++)
-                        {
+                        const int descendants = 3;
+                        var parents = levelsContext.Levels.OrderByDescending(level => levelsContext.GetAverageRatingForLevel(level)).Take(2 * descendants).ToList();
 
+                        for (int i = 0; i < descendants * 2; i += 2)
+                        {
+                            Level l1 = parents[i].Level.Mutate(MUTATION_RATE);
+                            Level l2 = parents[i + 1].Level.Mutate(MUTATION_RATE);
+                            Level newLevel = l1.Crossover(l2, CROSSOVER_RATE);
+                            levelsContext.Levels.Add(newLevel);
                         }
                     }
                     lastRatingsCount = ratingsCount;
+                    levelsContext.SaveChanges();
                 }
             }
         }
