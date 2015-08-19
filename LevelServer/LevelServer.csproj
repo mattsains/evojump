@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="Level.cs" />
     <Compile Include="DataObjects\LevelsDataContext.cs" />
-    <Compile Include="DataObjects\Ratings.cs" />
     <Compile Include="MaintainLevels.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

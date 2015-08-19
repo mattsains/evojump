@@ -1,9 +1,6 @@
 ﻿using EasierSockets;
 using LevelServer.DataObjects;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Threading.Tasks;
 
 namespace LevelServer
 {
@@ -15,12 +12,15 @@ namespace LevelServer
 
         static void Main(string[] args)
         {
+            MaintainLevels.Initialize();
+            Console.WriteLine("Database up and maintenance daemon running");
+
             ServerSocket = new ServerSocket("any", SERVER_PORT, "\n", OnClientStateChange, OnClientRequest);
             Console.WriteLine("Server listening on port {0}", SERVER_PORT);
 
-            
 
-            using (var levelscontext = new LevelsDataContext())
+
+            using (var levelscontext = new LevelsContext())
             {
                 levelscontext.Levels.Add(new LevelEntity());
                 levelscontext.SaveChanges();
@@ -68,39 +68,29 @@ namespace LevelServer
             switch (requestParts[0])
             {
                 case "level":
-                    using (var levelsContext = new LevelsDataContext())
+                    using (var levelsContext = new LevelsContext())
                     {
                         int lid = int.Parse(requestParts[1]);
                         Level l = levelsContext.GetLevelByID(lid);
                         return l.Encode();
                     }
                 case "random":
-                    using (var levelsContext = new LevelsDataContext())
+                    using (var levelsContext = new LevelsContext())
                     {
-                        Task<LevelEntity> task = levelsContext.Levels.SqlQuery(
-                            "SELECT name " +
-                                "FROM random AS r1 JOIN " +
-                                    "(SELECT CEIL(RAND() * " +
-                                        "(SELECT MAX(id) FROM random)) AS id) " +
-                                "AS r2 " +
-                            "WHERE r1.id >= r2.id ORDER BY r1.id ASC LIMIT 1").FirstAsync();
-                        task.Wait();
-                        return task.Result.Level.Encode();
+                        //TODO: give the client a random level. The solution is nontrivial
+                        return "";
                     }
                 case "rate":
-                    using (var ratingsContext = new RatingsContext())
+                    using (var levelsContext = new LevelsContext())
                     {
                         int lid = int.Parse(requestParts[1]);
                         int rating = int.Parse(requestParts[2]);
-                        ratingsContext.AddRating(lid, rating);
-                        ratingsContext.SaveChanges();
+                        levelsContext.AddRating(lid, rating);
+                        levelsContext.SaveChanges();
                     }
                     return "done";
                 default: return "";
             }
         }
-
-
-
     }
 }

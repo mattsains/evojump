@@ -54,9 +54,9 @@ namespace LevelServer
         public static Level Decode(string encoded)
         {
             IFormatter formatter = new BinaryFormatter();
-            byte[] buffer = Encoding.Unicode.GetBytes(encoded);
+            byte[] buffer = Convert.FromBase64String(encoded);
             Stream s = new MemoryStream();
-            s.Read(buffer, 0, buffer.Length);
+            s.Write(buffer, 0, buffer.Length);
             s.Seek(0, SeekOrigin.Begin);
             return (Level)formatter.Deserialize(s);
         }

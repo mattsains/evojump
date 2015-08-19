@@ -10,13 +10,13 @@ namespace LevelServer
     {
         const int MIN_LEVELS = 20;
         const int MAX_LEVELS = 10000;
-        Random R = new Random();
+        static Random R = new Random();
 
-        public void Initialize()
+        public static void Initialize()
         {
-            Database.SetInitializer<LevelsDataContext>(new DropCreateDatabaseAlways<LevelsDataContext>());
+            Database.SetInitializer<LevelsContext>(new DropCreateDatabaseAlways<LevelsContext>());
 
-            using (var levelsContext = new LevelsDataContext())
+            using (var levelsContext = new LevelsContext())
             {
                 int count = levelsContext.Levels.Count();
 
@@ -27,13 +27,10 @@ namespace LevelServer
                 }
                 else if (count > MAX_LEVELS)
                 {
-                    using (var ratingsContext = new RatingsContext())
-                    {
                         int toRemove = MAX_LEVELS - count;
-                        var levelsToRemove = levelsContext.Levels.OrderBy(level => ratingsContext.GetAverageRatingForLevel(level)).Take(toRemove);
+                        var levelsToRemove = levelsContext.Levels.OrderBy(level => levelsContext.GetAverageRatingForLevel(level)).Take(toRemove);
 
                         levelsContext.Levels.RemoveRange(levelsToRemove);
-                    }
                 }
                 levelsContext.SaveChanges();
             }
@@ -41,7 +38,7 @@ namespace LevelServer
             MaintainThread.Start();
         }
 
-        private Level GenerateRandomLevel()
+        private static Level GenerateRandomLevel()
         {
             return new Level();
         }
@@ -59,21 +56,21 @@ namespace LevelServer
         /// <summary>
         /// This method runs for the life of the program, slowly evolving the level set.
         /// </summary>
-        private void Maintain()
+        private static void Maintain()
         {
             int lastRatingsCount = 0;
             while (!IsClosing)
             {
                 Thread.Sleep(1000);
-                using (var ratingsContext = new RatingsContext())
+                using (var levelsContext = new LevelsContext())
                 {
-                    int ratingsCount = ratingsContext.Ratings.Count();
+                    int ratingsCount = levelsContext.Ratings.Count();
                     if (ratingsCount < lastRatingsCount)
                         lastRatingsCount = ratingsCount;
 
                     if (ratingsCount - lastRatingsCount > 10)
                     {
-                        for (int i=0; i<3; i++)
+                        for (int i = 0; i < 3; i++)
                         {
 
                         }
