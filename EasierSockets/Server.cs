@@ -9,6 +9,8 @@ namespace EasierSockets
 {
     public class ServerSocket
     {
+        static Encoding ENCODING = Encoding.Unicode;
+
         //this delegate is called when a client connects or disconnects
         public delegate void ClientStateChange(int id, bool connected);
 
@@ -167,7 +169,7 @@ namespace EasierSockets
                 catch (SocketException) { break; }
                 if (bytesrec == 0) break; //somehow this is a thing... the connection is closed if this thing returns zero
 
-                data += Encoding.ASCII.GetString(bytes, 0, bytesrec);
+                data += ENCODING.GetString(bytes, 0, bytesrec);
 
                 if (data.Contains(sep))
                 {
@@ -177,7 +179,7 @@ namespace EasierSockets
                         if ((response = reqDel(id, messages[i])) != "")
                             try
                             {
-                                handle.Send(Encoding.ASCII.GetBytes(response + sep));
+                                handle.Send(ENCODING.GetBytes(response + sep));
                             }
                             catch (SocketException) { break; }
                     data = messages[messages.Length - 1];
@@ -205,7 +207,7 @@ namespace EasierSockets
             {
                 try
                 {
-                    clients[pos].sock.Send(Encoding.ASCII.GetBytes(msg + separator));
+                    clients[pos].sock.Send(ENCODING.GetBytes(msg + separator));
                 }
                 catch (SocketException) { return false; }
             }

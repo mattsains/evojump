@@ -9,6 +9,9 @@ namespace EasierSockets
 {
     public class ClientSocket
     {
+        static Encoding ENCODING = Encoding.Unicode;
+
+
         /// <summary>
         /// Called when the server sends a message
         /// </summary>
@@ -54,7 +57,7 @@ namespace EasierSockets
         /// <returns>Whether the send was successful (also calls delegate if unsuccessful</returns>
         public bool Send(string message)
         {
-            byte[] tx = Encoding.ASCII.GetBytes(message + separator);
+            byte[] tx = ENCODING.GetBytes(message + separator);
             try
             {
                 sock.Send(tx);
@@ -112,7 +115,7 @@ namespace EasierSockets
                     serverDisconnect();
                     return;
                 }
-                data += Encoding.ASCII.GetString(rx, 0, bytesRec);
+                data += ENCODING.GetString(rx, 0, bytesRec);
                 if (data.Contains(separator))
                 {
                     string[] messages = data.Split(new string[] { separator }, StringSplitOptions.None);
