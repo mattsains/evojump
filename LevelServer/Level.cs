@@ -1,6 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace LevelServer
 {
@@ -19,8 +24,42 @@ namespace LevelServer
     [Serializable()]
     public class Level
     {
-        public List<ILevelComponent> LevelComponents;
+        public int LevelId;
+
+        public List<ILevelComponent> LevelComponents = new List<ILevelComponent>();
         public Point SpawnPoint;
+
+        /// <summary>
+        /// Encodes the level in base64 for transfer over a network. Use Level.Decode() to get it back
+        /// </summary>
+        /// <returns>A string containing the object in base64 encoding.</returns>
+        public string Encode()
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream s = new MemoryStream();
+            formatter.Serialize(s, this);
+            if (s.Length > int.MaxValue)
+                throw new ArgumentException("Can't serialize extremely large objects");
+            byte[] buffer = new byte[s.Length];
+            s.Seek(0, SeekOrigin.Begin);
+            s.Read(buffer, 0, (int)s.Length);
+            return Convert.ToBase64String(buffer);
+        }
+
+        /// <summary>
+        /// Decodes a level from base64 encoding
+        /// </summary>
+        /// <param name="encoded">The string containing the encoded level</param>
+        /// <returns>The level object</returns>
+        public static Level Decode(string encoded)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            byte[] buffer = Encoding.Unicode.GetBytes(encoded);
+            Stream s = new MemoryStream();
+            s.Read(buffer, 0, buffer.Length);
+            s.Seek(0, SeekOrigin.Begin);
+            return (Level)formatter.Deserialize(s);
+        }
     }
 
     public interface ILevelComponent
