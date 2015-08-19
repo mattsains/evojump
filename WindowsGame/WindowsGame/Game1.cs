@@ -20,7 +20,7 @@ namespace WindowsGame
         SpriteBatch spriteBatch;
 
 
-        protected IGameState _currentGameState = null; //TODO: set first game screen here
+        protected IGameState _currentGameState = new MainMenu(); //TODO: set first game screen here
         protected bool _hasLoadedContent = false;
 
         public IGameState CurrentGameState
@@ -43,7 +43,7 @@ namespace WindowsGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Window.AllowUserResizing = true;
 
             base.Initialize();
         }
@@ -97,8 +97,6 @@ namespace WindowsGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             CurrentGameState.Draw(gameTime, GraphicsDevice);
             base.Draw(gameTime);
         }
